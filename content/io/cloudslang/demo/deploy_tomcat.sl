@@ -32,7 +32,19 @@ flow:
           publish:
             - uuid: '${new_uuid}'
           navigate:
+            - SUCCESS: trim
+
+      - trim:
+          do:
+            io.cloudslang.base.strings.substring:
+            - origin_string: '${markus-+uuid}'
+            - end_index: '13'
+          publish:
+            - id: '${new_string}'
+          navigate:
+            - FAILURE: FAILURE
             - SUCCESS: SUCCESS
 
     results:
+      - FAILURE
       - SUCCESS
