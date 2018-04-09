@@ -37,7 +37,7 @@ flow:
       - trim:
           do:
             io.cloudslang.base.strings.substring:
-            - origin_string: '${markus-+uuid}'
+            - origin_string: '${"markus-"+uuid}'
             - end_index: '13'
           publish:
             - id: '${new_string}'
