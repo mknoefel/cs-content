@@ -12,31 +12,30 @@
 #!!#
 ########################################################################################################################
 
-namespace: content.io.cloudslang.demo
+namespace: io.cloudslang.demo
+imports:
+  base: io.cloudslang.base
+  vm: io.cloudslang.vmware.vcenter.virtual_machines
 
 flow:
-    name: deploy_tomcat
-
+  name: deploy_tomcat
     inputs:
       - hostname: "10.0.46.10"
       - username: "Capa1\\1286-capa1user"
       - password: "Automation123"
       - image: "Ubuntu"
       - folder: "Students"
-
-
     workflow:
       - uuid_generator:
           do:
-            io.cloudslang.base.utils.uuid_generator:
+            base.utils.uuid_generator:
           publish:
             - uuid: '${new_uuid}'
           navigate:
             - SUCCESS: trim
-
       - trim:
           do:
-            io.cloudslang.base.strings.substring:
+            base.strings.substring:
             - origin_string: '${"markus-"+uuid}'
             - end_index: '13'
           publish:
@@ -44,7 +43,22 @@ flow:
           navigate:
             - FAILURE: FAILURE
             - SUCCESS: SUCCESS
-
+      - clone_vm:
+        do:
+          vm.clone_virtual_machine:
+            - host: '${hostname}'
+            - hostname: 'trnvc.eswdc.net'
+            - username: '${username}'
+            - password: '${password}'
+            - clone_host: 'trnvc.eswdc.net'
+            - data_center_name: 'CAPA1 Datacenter'
+            - is_template: 'false'
+            - virtual_machine_name: '${image}'
+            - clone_name: '${id}'
+            - folder_name: '${folder}'
+        navigate:
+          - FAILURE: FAILURE
+          - SUCCESS: SUCCESS
     results:
       - FAILURE
       - SUCCESS
