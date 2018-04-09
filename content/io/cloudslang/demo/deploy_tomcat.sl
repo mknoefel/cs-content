@@ -24,6 +24,7 @@ flow:
       - image: "Ubuntu"
       - folder: "Students"
 
+
     workflow:
       - uuid_generator:
           do:
